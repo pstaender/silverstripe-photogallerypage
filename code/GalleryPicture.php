@@ -15,7 +15,6 @@ class GalleryPicture extends DataObject {
 
   private static $has_one = array(
     "Image"   => "Image",
-    "Teaser"  => "Image",
     "Page"    => "SiteTree",
   );
 
@@ -27,21 +26,6 @@ class GalleryPicture extends DataObject {
   // caching
   private $_allPicturesCount = null;
   private $_moscaicPicture = null;
-
-  function getCMSFields() {
-    $fields = parent::getCMSFields();
-    $uploadField = new UploadField(
-      $name = 'Teaser',
-      $title = 'Teaser Picture'
-    );
-    $URLSegment = ($this->Page()) ? $this->Page()->URLSegment : "misc";
-    $uploadField->setAllowedExtensions(['jpg', 'jpeg', 'png']);
-    $uploadField->setFolderName(Config::inst()->get('GalleryPage', 'imageFolder').$URLSegment.'/teaser');
-    $fields->addFieldsToTab('Root.Main', [
-      $uploadField
-    ]);
-    return $fields;
-  }
 
   function Preview() {
     return ($image = $this->Image()) ? $image->SetWidth(300) : null;
@@ -63,10 +47,6 @@ class GalleryPicture extends DataObject {
     $g = ($rgb >> 8) & 0xFF;
     $b = $rgb & 0xFF;
     return "$r,$g,$b";
-  }
-
-  function TopLeftPixelValue() {
-    return $this->pixelToColorString(0, 0);
   }
 
   function AllPicturesCount() {
@@ -98,24 +78,6 @@ class GalleryPicture extends DataObject {
 
   function Content($max = 250) {
     return ($this->Title) ? substr($this->Title,0,$max) : substr($this->Page()->Title,0,$max)." (".substr($this->Image()->Title,0,$max).")";
-  }
-
-  function getMosaicPicture() {
-    if (!$this->_moscaicPicture) {
-      $this->_moscaicPicture = imagecreatefromjpeg($this->Image()->SetWidth(6)->getFullPath());
-    }
-    return $this->_moscaicPicture;
-  }
-
-  private function pixelToColorString($x, $y, $image = null) {
-    if (!$image) {
-      $image = $this->getMosaicPicture();
-    }
-    $rgb = imagecolorat($image, $x, $y);
-    $r = ($rgb >> 16) & 0xFF;
-    $g = ($rgb >> 8) & 0xFF;
-    $b = $rgb & 0xFF;
-    return "$r,$g,$b";
   }
 
   function TopLeftPixelValue() {
