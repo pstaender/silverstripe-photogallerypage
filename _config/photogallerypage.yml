@@ -1,0 +1,5 @@
+---
+Name: photogallerypage
+---
+GalleryPage:
+  picturesPerPage: 100
