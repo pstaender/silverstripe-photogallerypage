@@ -5,6 +5,7 @@ class GalleryPicture extends DataObject {
   private static $db = array(
     "Sort"                => "Int",
     "Title"               => "Varchar(255)",
+    "Content"             => "Text",
     "URLSegment"          => "Varchar(255)",
     "ParmanentURLSegment" => "Varchar(255)",
   );
@@ -76,9 +77,9 @@ class GalleryPicture extends DataObject {
     return $this->Sort;
   }
 
-  function Content($max = 250) {
-    return ($this->Title) ? substr($this->Title,0,$max) : substr($this->Page()->Title,0,$max)." (".substr($this->Image()->Title,0,$max).")";
-  }
+  // function Content($max = 250) {
+  //   return ($this->Title) ? substr($this->Title,0,$max) : substr($this->Page()->Title,0,$max)." (".substr($this->Image()->Title,0,$max).")";
+  // }
 
   function TopLeftPixelValue() {
     return $this->pixelToColorString(0, 0);
