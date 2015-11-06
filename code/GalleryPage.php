@@ -14,6 +14,7 @@ class GalleryPage extends Page {
 
   private static $picturesPerPage = 20;
   private static $imageFolder = "images/";
+  private static $usePageURLSegmentAsSubfolder = true;
 
   function getCMSFields() {
     $fields = parent::getCMSFields();
@@ -23,14 +24,25 @@ class GalleryPage extends Page {
     $conf->getComponentByType('GridFieldPaginator')->setItemsPerPage($pictures_per_page);
     $conf->addComponent(new GridFieldBulkUpload());
     $conf->addComponent(new GridFieldSortableRows('Sort'));
-    $conf->getComponentByType('GridFieldBulkUpload')->setUfSetup('setFolderName', $this->config()->get('imageFolder').$this->URLSegment);
+    $imageFolder = $this->config()->get('imageFolder');
+    if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
+      $imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder) . $this->URLSegment;
+    }
+    $conf->getComponentByType('GridFieldBulkUpload')->setUfSetup('setFolderName', $imageFolder);
     $gridField = new GridField('Pictures', 'Pictures', $this->SortedPictures(), $conf);
     $dataColumns = $gridField->getConfig()->getComponentByType('GridFieldDataColumns');
-    $dataColumns->setDisplayFields(array(
-      'Sort'    => _t('PhotoGalleryPage.Sorting', 'Sorting'),
-      'Preview' => _t('PhotoGalleryPage.PreviewThumb', 'Preview'),
-      'Teaser'  => 'Teaser',
-    ));
+    $imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
+    if (!$imageFieldMapping) {
+      $imageFieldMapping = [
+        // 'Sort'                    => _t('PhotoGalleryPage.Sorting', 'Sorting'),
+        'Preview'                 => _t('PhotoGalleryPage.PreviewThumb', 'Preview'),
+        'Title'                   => _t('PhotoGalleryPage.Title', 'Title'),
+        'ContentFirstSentence'    => _t('PhotoGalleryPage.Content', 'Content'),
+        'URLSegment'              => _t('PhotoGalleryPage.URLSegment', 'URLSegment'),
+        'PermanentURLSegment'     => _t('PhotoGalleryPage.URLSegment', 'PermanentURLSegment'),
+      ];
+    }
+    $dataColumns->setDisplayFields($imageFieldMapping);
     if ($this->ID>0) {
       $fields->addFieldsToTab('Root.Pictures', array(
         $gridField,

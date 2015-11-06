@@ -3,3 +3,11 @@ Name: photogallerypage
 ---
 GalleryPage:
   picturesPerPage: 100
+  imageFolder: "images/"
+  usePageURLSegmentAsSubfolder: true
+  galleryImageListFieldMapping:
+    Title: 'Title'
+    Preview: 'Image'
+    ContentFirstSentence: 'Content'
+    URLSegment: 'URL'
+    PermanentURLSegment: 'Permanent URL'

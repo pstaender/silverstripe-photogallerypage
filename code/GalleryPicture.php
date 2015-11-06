@@ -32,6 +32,21 @@ class GalleryPicture extends DataObject {
     return ($image = $this->Image()) ? $image->SetWidth(300) : null;
   }
 
+  function Content() {
+    return $this->Content;
+  }
+
+  function ContentFirstSentence() {
+    if ($c = $this->dbObject('Content')) {
+      return $c->FirstSentence();
+    }
+    return $this->Content; 
+  }
+
+  function Title() {
+    return $this->Title;
+  }
+
   function getMosaicPicture() {
     if (!$this->_moscaicPicture) {
       $this->_moscaicPicture = imagecreatefromjpeg($this->Image()->SetWidth(6)->getFullPath());
@@ -114,10 +129,13 @@ class GalleryPicture extends DataObject {
     }
     if ((!$this->URLSegment) || (preg_match("/^\d+$/", $this->URLSegment)) || ($this->isChanged('Title')) || ($this->forceUpdateURLSegment)) {
       $filter = URLSegmentFilter::create();
-      $t = $filter->filter($this->Content());
+      $t = $filter->filter($this->Title());
       if (strlen(trim($t))>0) {
         $this->URLSegment = $t;
       } else {
+        $this->URLSegment = $this->Sort;
+      }
+      if (!$this->URLSegment) {
         $this->URLSegment = $this->ID;
       }
     }
