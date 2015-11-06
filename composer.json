@@ -3,15 +3,26 @@
   "description": "Adds a page type to manage multiple images including description and other various options",
   "type": "silverstripe-module",
   "homepage": "https://github.com/pstaender/silverstripe-photogallerypage",
-  "keywords": ["silverstripe", "image", "gallery", "imagegallery"],
+  "keywords": [
+    "silverstripe", "pictures", "image", "gallery", "imagegallery"
+  ],
   "license": "GNU General Public License v2",
   "authors": [
-    {"name": "Philipp Staender","email": "philipp.staender@gmail.com"}
+    {
+      "name": "Philipp Staender",
+      "email": "philipp.staender@gmail.com"
+    }
   ],
   "support": {
     "issues": "https://github.com/pstaender/silverstripe-photogallerypage/issues"
   },
   "require": {
-    "php": ">=5.2.0"
-  }
+    "php": ">=5.3.3",
+    "silverstripe/cms": ">=3.1 <4",
+    "silverstripe/framework": ">=3.1 <4",
+    "silverstripe/framework": ">=3.1 <4",
+    "colymba/gridfield-bulk-editing-tools": ">=2.1 <3",
+    "undefinedoffset/sortablegridfield": ">=0.4 <0.6"
+  },
+  "minimum-stability": "dev"
 }
