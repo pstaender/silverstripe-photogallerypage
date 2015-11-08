@@ -12,10 +12,6 @@ class GalleryPage extends Page {
 
   private static $icon = "silverstripe-photogallerypage/images/imageicon.png";
 
-  private static $picturesPerPage = 20;
-  private static $imageFolder = "images/";
-  private static $usePageURLSegmentAsSubfolder = true;
-
   function getCMSFields() {
     $fields = parent::getCMSFields();
 
@@ -32,19 +28,12 @@ class GalleryPage extends Page {
     $gridField = new GridField('Pictures', 'Pictures', $this->SortedPictures(), $conf);
     $dataColumns = $gridField->getConfig()->getComponentByType('GridFieldDataColumns');
     $imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
-    if (!$imageFieldMapping) {
-      $imageFieldMapping = [
-        // 'Sort'                    => _t('PhotoGalleryPage.Sorting', 'Sorting'),
-        'Preview'                 => _t('PhotoGalleryPage.PreviewThumb', 'Preview'),
-        'Title'                   => _t('PhotoGalleryPage.Title', 'Title'),
-        'ContentFirstSentence'    => _t('PhotoGalleryPage.Content', 'Content'),
-        'URLSegment'              => _t('PhotoGalleryPage.URLSegment', 'URLSegment'),
-        'PermanentURLSegment'     => _t('PhotoGalleryPage.URLSegment', 'PermanentURLSegment'),
-      ];
+    foreach($imageFieldMapping as $key => $value) {
+      $imageFieldMapping[$key] = _t('GalleryPicture.'.$key, $value);
     }
     $dataColumns->setDisplayFields($imageFieldMapping);
     if ($this->ID>0) {
-      $fields->addFieldsToTab('Root.Pictures', array(
+      $fields->addFieldsToTab('Root.'._t('GalleryPage.Photos', 'Photos'), array(
         $gridField,
       ));
     }
@@ -55,22 +44,16 @@ class GalleryPage extends Page {
     return $this->Pictures()->sort("Sort", ($direction==='-') ? "DESC" : "ASC");
   }
 
-  function FirstPicture() {
-    return $this->SortedPictures()->First();
-  }
-
-  function PicturesCount() {
-    return $this->SortedPictures()->Count();
-  }
-
-  function Children() {
-    return $this->SortedPictures();
+  function FirstPicture($direction = '+') {
+    return $this->SortedPictures($direction)->First();
   }
 
   function onBeforeDelete() {
     parent::onBeforeDelete();
-    foreach($this->Pictures() as $pic) {
-      $pic->delete();
+    if ($this->config()->get('deletePicturesOnDeleteGallery')) {
+      foreach($this->Pictures() as $pic) {
+        $pic->delete();
+      }
     }
   }
 

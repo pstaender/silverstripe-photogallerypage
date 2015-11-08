@@ -1,0 +1,8 @@
+de:
+  GalleryPage:
+    Photos: Fotos
+  GalleryPicture:
+    Title: Titel
+    ImagePreview: Bildvorschau
+    ContentPreview: Inhalt (erster Satz)
+    PermanentURL: Permanente URL (optional)

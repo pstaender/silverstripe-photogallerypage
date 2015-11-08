@@ -19,16 +19,30 @@ class GalleryPage_Controller extends Page_Controller {
   }
 
   function picture() {
-    $this->CurrentPicture = $this->findPictureByURLSegment($this->request->param('Picture'));
-    if ($this->CurrentPicture) {
-      return [];
+    if ($this->config()->get('picturesAccessibleViaURL')) {
+      $this->CurrentPicture = $this->findPictureByURLSegment($this->request->param('Picture'));
+      if ($this->CurrentPicture) {
+        return [];
+      } else {
+        if (($this->request->param('Picture')) || ($this->Pictures()->Count() > 0)) {
+          if ($this->config()->get('redirectToParentPageIfPictureNotFound')) {
+            return $this->redirect($this->dataRecord->Link());
+          } else {
+            return $this->httpError(404);
+          }
+        } else {
+          return [];
+        }
+      }
     } else {
-      $this->httpError(404);
+      return [];
     }
   }
 
   function hasAction($action) {
     if ($this->findPictureByURLSegment($action)) {
+      return true;
+    } else if (!$this->config()->get('picturesAccessibleViaURL')) {
       return true;
     } else {
       return parent::hasAction($action);
@@ -38,6 +52,8 @@ class GalleryPage_Controller extends Page_Controller {
   function checkAccessAction($action) {
     if ($this->hasAction($action)) {
       return $this->dataRecord->canView();
+    } else if (!$this->config()->get('picturesAccessibleViaURL')) {
+      return true;
     } else {
       return false;
     }
@@ -49,6 +65,5 @@ class GalleryPage_Controller extends Page_Controller {
     }
     return ($this->CurrentPicture) ? $this->CurrentPicture : $this->CurrentPicture = $this->dataRecord->FirstPicture();
   }
-
 
 }
