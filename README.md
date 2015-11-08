@@ -29,7 +29,7 @@ Best practice via composer:
 
 ```sh
   $ cd to_your_silverstripe_root_dir
-  $ composer require pstaender/silverstripe-photogallerypage *
+  $ composer require pstaender/silverstripe-photogallerypage
 ```
 
 Don't forget to run a `dev/build` after installing the module(s): `http://localhost/dev/build?flush=all`.
