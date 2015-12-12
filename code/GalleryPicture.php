@@ -181,6 +181,62 @@ class GalleryPicture extends DataObject {
     return $this->IsPixelAbove($this->TopRightPixelValue(), $threshold);
   }
 
+  function generateOptimizedJPEG(array $options = []) {
+    if (($image = $this->Image()) && ($parentFolder = $image->Parent())) {
+      $maxHeight = $options['maxHeight'];
+      $maxWidth = $options['maxWidth'];
+      $quality = $options['quality'];
+      $subfolder = $options['subfolder'];
+      $tmpDir = sys_get_temp_dir();
+      $qualityBefore = Config::inst()->get('GDBackend', 'default_quality');
+      Config::inst()->update('GDBackend', 'default_quality', 100);
+      $folderPath = substr($parentFolder->getRelativePath().$subfolder, strlen(ASSETS_DIR));
+      $folder = Folder::find_or_make($folderPath);
+      $resizedImage = $image->FitMax($maxWidth, $maxHeight);
+      $destDir = $folder->getFullPath();
+      $destFile = $destDir.$image->Name;
+      $command = $this->config()->get('jpegOptimCommand')." --strip-all -m".$quality." -o --stdout '".$resizedImage->getFullPath()."' > '$destFile'";
+      $tmpFile = $tmpDir.$image->Name;
+      shell_exec($command);
+      Filesystem::sync($folder->ID);
+      Config::inst()->update('GDBackend', 'default_quality', $qualityBefore);
+    } else {
+      // no image attached
+      return null;
+    }
+  }
+
+  function generateOptimizedJPEGAllSizes() {
+    $config = [];
+    $config['normal'] = $this->config()->get('normal');
+    $config['medium'] = $this->config()->get('medium');
+    $config['small'] = $this->config()->get('small');
+    foreach($config as $size => $configData) {
+      if (isset($configData['subfolder'])) {
+        $this->generateOptimizedJPEG($configData);
+      }
+    }
+  }
+
+  function OptimizedJPEG($size = 'normal') {
+    if ($image = $this->Image()) {
+      $folder = ($config = $this->config()->get($size)) ? $config['subfolder'] : null;
+      if ($folder) {
+        $filepath = $image->Parent()->getRelativePath().$folder.'/'.$image->Name;
+        // return $filepath;
+        return Image::find($filepath);
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  function onAfterWrite() {
+    parent::onAfterWrite();
+    $this->generateOptimizedJPEGAllSizes();
+  }
+
   function onBeforeWrite() {
     parent::onBeforeWrite();
 

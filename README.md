@@ -51,6 +51,7 @@ Helpful methods on `GalleryPicture`:
   * LinkingMode
   * Position
   * Link
+  * OptimizedJPEG(normal|medium|small) (requires unix tool `jpegoptim` -> `apt-get install jpegoptim`)
 
 ## Usage in Template
 
