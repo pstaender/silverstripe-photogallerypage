@@ -69,5 +69,44 @@ class GalleryPage extends Page {
     );
   }
 
+  function NextPicture($currentPicture = null) {
+    if (!$currentPicture) {
+      $currentPicture = $this;
+    }
+    $sort = $currentPicture->Sort;
+    $next = $this->SortedPictures()->filter(['Sort:GreaterThan' => $sort])->sort('Sort ASC')->first();
+    if (!$next) {
+      // select first from next gallery
+      $nextGallery = ($this->Parent()->ClassName == 'GalleryPageHolder') ? $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first() : $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first();
+      if ($nextGallery) {
+        $next = $nextGallery->SortedPictures()->First();
+      }
+
+    }
+    return $next;
+  }
+
+  function NumberOfPictures() {
+    return $this->SortedPictures()->Count();
+  }
+
+  function PrevPicture($currentPicture = null) {
+    if (!$currentPicture) {
+      $currentPicture = $this;
+    }
+    $sort = $currentPicture->Sort;
+    $prev = $this->SortedPictures()->filter(['Sort:LessThan' => $sort])->sort("Sort", "DESC")->first();
+    if (!$prev) {
+      // select last from prev gallery
+      $prevGallery = $this->Parent()->AllChildren()->filter(['Sort:LessThan' => $this->Sort])->sort("Sort", "DESC")->first();
+
+      if (is_a($prevGallery,'GalleryPage')) {
+        $prev = $prevGallery->SortedPictures()->Last();
+      }
+
+
+    }
+    return $prev;
+  }
 
 }

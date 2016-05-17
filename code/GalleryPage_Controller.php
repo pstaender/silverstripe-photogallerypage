@@ -66,4 +66,12 @@ class GalleryPage_Controller extends Page_Controller {
     return ($this->CurrentPicture) ? $this->CurrentPicture : $this->CurrentPicture = $this->dataRecord->FirstPicture();
   }
 
+  function NextPicture() {
+    return $this->dataRecord->NextPicture($this->CurrentPicture());
+  }
+
+  function PrevPicture() {
+    return $this->dataRecord->PrevPicture($this->CurrentPicture());
+  }
+
 }

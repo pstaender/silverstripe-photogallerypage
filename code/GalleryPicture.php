@@ -232,6 +232,10 @@ class GalleryPicture extends DataObject {
     return null;
   }
 
+  function NumberOfPicture() {
+    return $this->Sort;
+  }
+
   function onAfterWrite() {
     parent::onAfterWrite();
     $this->generateOptimizedJPEGAllSizes();
