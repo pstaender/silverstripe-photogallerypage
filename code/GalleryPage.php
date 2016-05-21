@@ -78,7 +78,7 @@ class GalleryPage extends Page {
     if (!$next) {
       // select first from next gallery
       $nextGallery = ($this->Parent()->ClassName == 'GalleryPageHolder') ? $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first() : $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first();
-      if ($nextGallery) {
+      if (($nextGallery) && (method_exists($next, 'SortedPictures'))) {
         $next = $nextGallery->SortedPictures()->First();
       }
 
