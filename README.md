@@ -1,4 +1,4 @@
-# Photogallery Page module
+# Photogallery Module
 
 Adds a page type to manage multiple images including description and other various options
 
@@ -98,6 +98,7 @@ Name: yourprojectconfig
 ---
 GalleryPicture:
   previewWidth: 300
+  deleteImageFileOnDelete: true
   removeCMSFields:
     - Sort
     - URLSegment
@@ -107,7 +108,6 @@ GalleryPage:
   picturesPerPage: 100
   imageFolder: "images/"
   usePageURLSegmentAsSubfolder: true
-  deletePicturesOnDeleteGallery: true
   galleryImageListFieldMapping:
     Title: 'Title'
     ImagePreview: 'ImagePreview'
@@ -115,3 +115,9 @@ GalleryPage:
     URLSegment: 'URL'
     PermanentURLSegment: 'PermanentURL'
 ```
+
+## Copyright and License
+
+This project is under GNU General Public License v2
+
+Icons by Freepik (http://www.flaticon.com/packs/web-design-2)

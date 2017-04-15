@@ -5,6 +5,7 @@ GalleryPicture:
   previewWidth: 200
   previewHeight: 200
   jpegOptimCommand: /usr/bin/jpegoptim
+  deleteImageFileOnDelete: true
   #/usr/local/bin/jpegoptim
   removeCMSFields:
     - Sort
@@ -32,7 +33,6 @@ GalleryPage:
   picturesPerPage: 100
   imageFolder: "images/"
   usePageURLSegmentAsSubfolder: true
-  deletePicturesOnDeleteGallery: true
   galleryImageListFieldMapping:
     Title: 'Title'
     ImagePreview: 'ImagePreview'

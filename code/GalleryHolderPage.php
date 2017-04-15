@@ -10,4 +10,6 @@ class GalleryPageHolder extends Page {
     'GalleryPage',
   );
 
+	private static $icon = "silverstripe-photogallerypage/images/images.svg";
+
 }
