@@ -237,7 +237,9 @@ class GalleryPicture extends DataObject {
 
 	function onAfterWrite() {
 		parent::onAfterWrite();
-		$this->generateOptimizedJPEGAllSizes();
+		if ($this->config()->get('generateOptimizedJPEG')) {
+			$this->generateOptimizedJPEGAllSizes();
+		}
 	}
 
 	function onBeforeWrite() {

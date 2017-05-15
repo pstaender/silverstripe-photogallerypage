@@ -5,6 +5,7 @@ GalleryPicture:
   previewWidth: 200
   previewHeight: 200
   jpegOptimCommand: /usr/bin/jpegoptim
+  generateOptimizedJPEG: true
   deleteImageFileOnDelete: true
   #/usr/local/bin/jpegoptim
   removeCMSFields:
