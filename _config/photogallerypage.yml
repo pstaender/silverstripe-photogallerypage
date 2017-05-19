@@ -31,7 +31,7 @@ GalleryPage_Controller:
   picturesAccessibleViaURL: true
   redirectToParentPageIfPictureNotFound: false
 GalleryPage:
-  picturesPerPage: 100
+  picturesPerPage: 1000
   imageFolder: "images/"
   usePageURLSegmentAsSubfolder: true
   galleryImageListFieldMapping:
