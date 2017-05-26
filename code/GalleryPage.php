@@ -1,5 +1,7 @@
 <?php
 
+use SilverStripe\Forms\GridField;
+
 class GalleryPage extends Page {
 
 	private static $db = [];
@@ -9,33 +11,32 @@ class GalleryPage extends Page {
 	private static $has_many = [
 		"Pictures" => "GalleryPicture",
 	];
-
 	private static $icon = "silverstripe-photogallerypage/images/image.svg";
 
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
-
 		$pictures_per_page = $this->config()->get('picturesPerPage');
-		$conf = GridFieldConfig_RelationEditor::create($pictures_per_page);
-		$conf->getComponentByType('GridFieldPaginator')->setItemsPerPage($pictures_per_page);
-		$conf->addComponent(new GridFieldBulkUpload());
-		$conf->addComponent(new GridFieldSortableRows('Sort'));
+		$conf = GridField\GridFieldConfig_RelationEditor::create();
+		$conf->getComponentByType(GridField\GridFieldPaginator::class)->setItemsPerPage($pictures_per_page);
+		$conf->addComponent(new Colymba\BulkUpload\BulkUploader());
 		$imageFolder = $this->config()->get('imageFolder');
 		if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
 			$imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder) . $this->URLSegment;
 		}
-		$conf->getComponentByType('GridFieldBulkUpload')->setUfSetup('setFolderName', $imageFolder);
-		$gridField = new GridField('Pictures', 'Pictures', $this->SortedPictures(), $conf);
-		$dataColumns = $gridField->getConfig()->getComponentByType('GridFieldDataColumns');
+		$conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $imageFolder);
+		$pictures = $this->SortedPictures();
+		$gridField = new GridField\GridField('Pictures', 'Pictures', $pictures, $conf);
+		$gridField->getConfig()->addComponent(new \SilverStripe\GridFieldExtensions\GridFieldOrderableRows('Sort'));
+		$dataColumns = $gridField->getConfig()->getComponentByType(GridField\GridFieldDataColumns::class);
 		$imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
 		foreach ($imageFieldMapping as $key => $value) {
 			$imageFieldMapping[$key] = _t('GalleryPicture.' . $key, $value);
 		}
 		$dataColumns->setDisplayFields($imageFieldMapping);
 		if ($this->ID > 0) {
-			$fields->addFieldsToTab('Root.' . _t('GalleryPage.Photos', 'Photos'), array(
+			$fields->addFieldsToTab('Root.' . _t('GalleryPage.Photos', 'Photos'), [
 				$gridField,
-			));
+			]);
 		}
 		return $fields;
 	}
@@ -46,18 +47,6 @@ class GalleryPage extends Page {
 
 	function FirstPicture($direction = '+') {
 		return $this->SortedPictures($direction)->First();
-	}
-
-	function asJSON() {
-		$json = new JSONDataFormatter();
-		$pictures = array();
-		foreach ($this->SortedPictures() as $pic) {
-			$pictures[] = $json->convertDataObjectToJSONObject($pic);
-		}
-		return array(
-			'page'     => $json->convertDataObjectToJSONObject($this),
-			'pictures' => $pictures,
-		);
 	}
 
 	function NextPicture($currentPicture = null) {

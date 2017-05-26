@@ -1,10 +1,10 @@
 <?php
 
-class GalleryPage_Controller extends Page_Controller {
+class GalleryPage_Controller extends PageController {
 
-	private static $url_handlers = array(
+	private static $url_handlers = [
 		'$Picture' => 'picture', // catch-all
-	);
+	];
 
 	private function findPictureByURLSegment($URLSegment, $cached = true) {
 		if (($cached) && ($this->CurrentPicture)) {
