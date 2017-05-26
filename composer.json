@@ -18,7 +18,8 @@
   },
   "require": {
     "php": ">=5.3.3",
-    "colymba/gridfield-bulk-editing-tools": "dev-master"
+    "colymba/gridfield-bulk-editing-tools": "dev-master",
+    "silverstripe-australia/gridfieldextensions": "dev-master"
   },
   "minimum-stability": "dev"
 }
