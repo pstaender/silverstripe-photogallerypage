@@ -19,7 +19,7 @@
   "require": {
     "php": ">=5.3.3",
     "colymba/gridfield-bulk-editing-tools": "dev-master",
-    "symbiote/gridfieldextensions": "dev-master"
+    "symbiote/silverstripe-gridfieldextensions": "dev-master"
   },
   "minimum-stability": "dev"
 }
