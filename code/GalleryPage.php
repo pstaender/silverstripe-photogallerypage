@@ -9,7 +9,7 @@ class GalleryPage extends Page {
 	private static $has_one = [];
 
 	private static $has_many = [
-		"Pictures" => "GalleryPicture",
+		"Pictures" => GalleryPicture::class,
 	];
 	private static $icon = "silverstripe-photogallerypage/images/image.svg";
 
