@@ -26,7 +26,8 @@ class GalleryPage extends Page {
 		$conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $imageFolder);
 		$pictures = $this->SortedPictures();
 		$gridField = new GridField\GridField('Pictures', 'Pictures', $pictures, $conf);
-		$gridField->getConfig()->addComponent(new \SilverStripe\GridFieldExtensions\GridFieldOrderableRows('Sort'));
+		$gridField->getConfig()->addComponent(new \Symbiote\GridFieldExtensions\GridFieldOrderableRows('Sort'));
+
 		$dataColumns = $gridField->getConfig()->getComponentByType(GridField\GridFieldDataColumns::class);
 		$imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
 		foreach ($imageFieldMapping as $key => $value) {

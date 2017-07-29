@@ -21,3 +21,4 @@ GalleryPage:
     ContentPreview: 'ContentPreview'
     URLSegment: 'URL'
     PermanentURLSegment: 'PermanentURL'
+    Sort: 'Sort'

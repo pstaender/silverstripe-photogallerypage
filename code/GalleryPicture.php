@@ -209,8 +209,8 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject {
 			$this->URLSegment = $this->URLSegment . "-" . sprintf('%02d', $number);
 			$i++;
 		}
-		if (!$this->Sort) {
-			$this->Sort = self::get()->filter(['ParentID:GreaterThan' => 0, 'ParentID' => $this->ParentID])->max('Sort') + 1;
+		if (!$this->Sort && $this->PageID > 0)  {
+			$this->Sort = GalleryPicture::get()->filter(['PageID' => $this->PageID])->max('Sort') + 1;
 		}
 	}
 
