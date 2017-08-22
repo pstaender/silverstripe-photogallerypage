@@ -96,7 +96,7 @@ class GalleryPage extends Page {
 		}
 	}
 
-	private function deleteGalleryPictures() {
+	function deleteGalleryPictures() {
 		if ($pictures = $this->Pictures()) {
 			foreach ($pictures as $picture) {
 				$picture->delete();

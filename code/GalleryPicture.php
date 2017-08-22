@@ -218,6 +218,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject {
 	function onBeforeDelete() {
 		parent::onBeforeDelete();
 		if (($image = $this->Image()) && ($this->config()->get('deleteImageFileOnDelete'))) {
+			$image->deleteFile();
 			$image->delete();
 		}
 	}
