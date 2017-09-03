@@ -19,6 +19,7 @@ class GalleryPage extends Page {
 		$conf = GridField\GridFieldConfig_RelationEditor::create();
 		$conf->getComponentByType(GridField\GridFieldPaginator::class)->setItemsPerPage($pictures_per_page);
 		$conf->addComponent(new Colymba\BulkUpload\BulkUploader());
+        $conf->addComponent(new \SilverStripe\Forms\GridField\GridFieldDeleteAction());
 		$imageFolder = $this->config()->get('imageFolder');
 		if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
 			$imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder) . $this->URLSegment;
@@ -93,15 +94,6 @@ class GalleryPage extends Page {
 		// see https://github.com/silverstripe/silverstripe-framework/issues/4017
 		if (isset($publishedStatusFlag['addedtodraft'])) {
 			$this->deleteGalleryPictures();
-		}
-	}
-    
-    function onAfterPublish() {
-		parent::onAfterPublish();
-		foreach ($this->Pictures() as $picture) {
-			if ($image = $picture->Image()) {
-				$image->doPublish();
-			}
 		}
 	}
 
