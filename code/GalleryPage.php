@@ -31,6 +31,7 @@ class GalleryPage extends Page {
 			$imageFieldMapping[$key] = _t('GalleryPicture.' . $key, $value);
 		}
 		$dataColumns->setDisplayFields($imageFieldMapping);
+
 		if ($this->ID > 0) {
 			$fields->addFieldsToTab('Root.' . _t('GalleryPage.Photos', 'Photos'), [
 				$gridField,

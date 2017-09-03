@@ -16,7 +16,7 @@ GalleryPage:
   imageFolder: "images/$URLSegment"
   galleryImageListFieldMapping:
     Title: 'Title'
-    ImagePreview: 'ImagePreview'
+    PreviewImageField: 'ImagePreview'
     ContentPreview: 'ContentPreview'
     URLSegment: 'URL'
     PermanentURLSegment: 'PermanentURL'

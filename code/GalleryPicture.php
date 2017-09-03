@@ -75,6 +75,10 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject {
 		return ($image = $this->Image()) ? $image->Fit($width, $height) : null;
 	}
 
+    function PreviewImageField() {
+        return ($image = $this->Image()) ? \SilverStripe\Forms\LiteralField::create('Preview', '<img src="'.$image->PreviewLink().'" style="max-height: 150px;" alt="'.$image->Title.'" />') : null;
+    }
+
 	function Content() {
 		return $this->Content;
 	}
