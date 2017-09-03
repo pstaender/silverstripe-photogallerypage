@@ -95,6 +95,15 @@ class GalleryPage extends Page {
 			$this->deleteGalleryPictures();
 		}
 	}
+    
+    function onAfterPublish() {
+		parent::onAfterPublish();
+		foreach ($this->Pictures() as $picture) {
+			if ($image = $picture->Image()) {
+				$image->doPublish();
+			}
+		}
+	}
 
 	function deleteGalleryPictures() {
 		if ($pictures = $this->Pictures()) {
