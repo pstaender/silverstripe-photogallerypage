@@ -13,8 +13,7 @@ GalleryPage_Controller:
   redirectToParentPageIfPictureNotFound: false
 GalleryPage:
   picturesPerPage: 1000
-  imageFolder: "images/"
-  usePageURLSegmentAsSubfolder: true
+  imageFolder: "images/$URLSegment"
   galleryImageListFieldMapping:
     Title: 'Title'
     ImagePreview: 'ImagePreview'
