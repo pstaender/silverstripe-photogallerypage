@@ -20,11 +20,7 @@ class GalleryPage extends Page {
 		$conf->getComponentByType(GridField\GridFieldPaginator::class)->setItemsPerPage($pictures_per_page);
 		$conf->addComponent(new Colymba\BulkUpload\BulkUploader());
         $conf->addComponent(new \SilverStripe\Forms\GridField\GridFieldDeleteAction());
-		$imageFolder = $this->config()->get('imageFolder');
-		if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
-			$imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder) . $this->URLSegment;
-		}
-		$conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $imageFolder);
+		$conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $this->uploadFolderName());
 		$pictures = $this->SortedPictures();
 		$gridField = new GridField\GridField('Pictures', 'Pictures', $pictures, $conf);
 		$gridField->getConfig()->addComponent(new \Symbiote\GridFieldExtensions\GridFieldOrderableRows('Sort'));
@@ -104,5 +100,16 @@ class GalleryPage extends Page {
 			}
 		}
 	}
-
+    
+    private function uploadFolderName() {
+        $imageFolder = $this->config()->get('imageFolder');
+        // backward compatibility: use 'images/$URLSegment' instead
+        if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
+            $imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder) . $this->URLSegment;
+        }
+        $imageFolder = str_replace('$ID', $this->ID, $imageFolder);
+        $imageFolder = str_replace('$URLSegment', $this->URLSegment, $imageFolder);
+        return $imageFolder;
+    }
+    
 }
