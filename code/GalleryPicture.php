@@ -221,6 +221,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject {
     function onAfterWrite() {
 		parent::onAfterWrite();
 		if ($this->PageID > 0 && $image = $this->Image()) {
+            $image->write(); //maybe that's too much here...
 			$image->doPublish();
 		}
 	}
