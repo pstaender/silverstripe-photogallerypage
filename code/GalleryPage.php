@@ -20,7 +20,7 @@ class GalleryPage extends Page {
 		$conf->getComponentByType('GridFieldPaginator')->setItemsPerPage($pictures_per_page);
 		$conf->addComponent(new GridFieldBulkUpload());
 		$conf->addComponent(new GridFieldSortableRows('Sort'));
-		$imageFolder = $this->config()->get('imageFolder');
+		$imageFolder = $this->imageFolderName();
 		if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
 			$imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder) . $this->URLSegment;
 		}
@@ -112,6 +112,10 @@ class GalleryPage extends Page {
 				$picture->delete();
 			}
 		}
+	}
+
+	protected function imageFolderName() {
+		return $this->config()->get('imageFolder');
 	}
 
 }
