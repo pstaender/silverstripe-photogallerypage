@@ -96,11 +96,11 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject {
 
 	function getMosaicPicture($width = null, $height = null) {
 		if (!$this->_moscaicPicture) {
-			if ($width > 0) {
-				$this->_moscaicPicture = imagecreatefromjpeg($this->Image()->SetWidth($width)->getFullPath());
+			if (($width > 0) && ($this->Image()->ScaleWidth($width))) {
+				$this->_moscaicPicture = imagecreatefromstring($this->Image()->ScaleWidth($width)->getString());
 			}
-			if ($height > 0) {
-				$this->_moscaicPicture = imagecreatefromjpeg($this->Image()->SetHeight($height)->getFullPath());
+			if (($height > 0) && ($this->Image()->ScaleHeight($height))) {
+				$this->_moscaicPicture = imagecreatefromstring($this->Image()->ScaleHeight($height)->getString());
 			}
 		}
 		return $this->_moscaicPicture;
@@ -110,10 +110,15 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject {
 		if (!$image) {
 			$image = $this->getMosaicPicture($width, $height);
 		}
-		$rgb = imagecolorat($image, $x, $y);
-		$r = ($rgb >> 16) & 0xFF;
-		$g = ($rgb >> 8) & 0xFF;
-		$b = $rgb & 0xFF;
+		if ($image) {
+			$rgb = imagecolorat($image, $x, $y);
+			$r = ($rgb >> 16) & 0xFF;
+			$g = ($rgb >> 8) & 0xFF;
+			$b = $rgb & 0xFF;
+		} else {
+			$r = $g = $b = "0,0,0";
+		}
+		
 		return "$r,$g,$b";
 	}
 
