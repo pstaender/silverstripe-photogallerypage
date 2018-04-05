@@ -6,10 +6,6 @@ class GalleryPageHolder extends Page {
 
   private static $has_one = array();
 
-  private static $allowed_children = array(
-    'GalleryPage',
-  );
-
-	private static $icon = "silverstripe-photogallerypage/images/images.svg";
+  private static $icon = "silverstripe-photogallerypage/images/images.svg";
 
 }
