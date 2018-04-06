@@ -2,107 +2,117 @@
 
 use SilverStripe\Forms\GridField;
 
-class GalleryPage extends Page {
+class GalleryPage extends Page
+{
 
-	private static $db = [];
+    private static $db = [];
 
-	private static $has_one = [];
+    private static $has_one = [];
 
-	private static $has_many = [
-		"Pictures" => GalleryPicture::class,
-	];
-	private static $icon = "silverstripe-photogallerypage/images/image.svg";
+    private static $has_many = [
+        "Pictures" => GalleryPicture::class,
+    ];
+    private static $icon = "silverstripe-photogallerypage/images/image.svg";
 
-	function getCMSFields() {
-		$fields = parent::getCMSFields();
-		$pictures_per_page = $this->config()->get('picturesPerPage');
-		$conf = GridField\GridFieldConfig_RelationEditor::create();
-		$conf->getComponentByType(GridField\GridFieldPaginator::class)->setItemsPerPage($pictures_per_page);
-		$conf->addComponent(new Colymba\BulkUpload\BulkUploader());
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+        $pictures_per_page = $this->config()->get('picturesPerPage');
+        $conf = GridField\GridFieldConfig_RelationEditor::create();
+        $conf->getComponentByType(GridField\GridFieldPaginator::class)->setItemsPerPage($pictures_per_page);
+        $conf->addComponent(new Colymba\BulkUpload\BulkUploader());
         $conf->addComponent(new \SilverStripe\Forms\GridField\GridFieldDeleteAction());
-		$conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $this->uploadFolderName());
-		$pictures = $this->SortedPictures();
-		$gridField = new GridField\GridField('Pictures', 'Pictures', $pictures, $conf);
-		$gridField->getConfig()->addComponent(new \Symbiote\GridFieldExtensions\GridFieldOrderableRows('Sort'));
+        $conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $this->uploadFolderName());
+        $pictures = $this->SortedPictures();
+        $gridField = new GridField\GridField('Pictures', 'Pictures', $pictures, $conf);
+        $gridField->getConfig()->addComponent(new \Symbiote\GridFieldExtensions\GridFieldOrderableRows('Sort'));
 
-		$dataColumns = $gridField->getConfig()->getComponentByType(GridField\GridFieldDataColumns::class);
-		$imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
-		foreach ($imageFieldMapping as $key => $value) {
-			$imageFieldMapping[$key] = _t('GalleryPicture.' . $key, $value);
-		}
-		$dataColumns->setDisplayFields($imageFieldMapping);
+        $dataColumns = $gridField->getConfig()->getComponentByType(GridField\GridFieldDataColumns::class);
+        $imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
+        foreach ($imageFieldMapping as $key => $value) {
+            $imageFieldMapping[$key] = _t('GalleryPicture.' . $key, $value);
+        }
+        $dataColumns->setDisplayFields($imageFieldMapping);
 
-		if ($this->ID > 0) {
-			$fields->addFieldsToTab('Root.' . _t('GalleryPage.Photos', 'Photos'), [
-				$gridField,
-			]);
-		}
-		return $fields;
-	}
+        if ($this->ID > 0) {
+            $fields->addFieldsToTab('Root.' . _t('GalleryPage.Photos', 'Photos'), [
+                $gridField,
+            ]);
+        }
+        return $fields;
+    }
 
-	function SortedPictures($direction = '+') {
-		return $this->Pictures()->sort("Sort", ($direction === '-') ? "DESC" : "ASC");
-	}
+    public function SortedPictures($direction = '+')
+    {
+        return $this->Pictures()->sort("Sort", ($direction === '-') ? "DESC" : "ASC");
+    }
 
-	function FirstPicture($direction = '+') {
-		return $this->SortedPictures($direction)->First();
-	}
+    public function FirstPicture($direction = '+')
+    {
+        return $this->SortedPictures($direction)->First();
+    }
 
-	function NextPicture($currentPicture = null) {
-		if (!$currentPicture) {
-			$currentPicture = $this;
-		}
-		$sort = $currentPicture->Sort;
-		$next = $this->SortedPictures()->filter(['Sort:GreaterThan' => $sort])->sort('Sort ASC')->first();
-		if (!$next) {
-			// select first from next gallery
-			$nextGallery = ($this->Parent()->ClassName == 'GalleryPageHolder') ? $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first() : $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first();
-			if (($nextGallery) && (method_exists($next, 'SortedPictures'))) {
-				$next = $nextGallery->SortedPictures()->First();
-			}
-		}
-		return $next;
-	}
+    public function NextPicture($currentPicture = null)
+    {
+        if (!$currentPicture) {
+            $currentPicture = $this;
+        }
+        $sort = $currentPicture->Sort;
+        $next = $this->SortedPictures()->filter(['Sort:GreaterThan' => $sort])->sort('Sort ASC')->first();
+        if (!$next) {
+            // select first from next gallery
+            $nextGallery = ($this->Parent()->ClassName == 'GalleryPageHolder') ? $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first() : $this->Parent()->AllChildren()->filter(['Sort:GreaterThan' => $this->Sort])->sort('Sort ASC')->first();
+            if (($nextGallery) && (method_exists($next, 'SortedPictures'))) {
+                $next = $nextGallery->SortedPictures()->First();
+            }
+        }
+        return $next;
+    }
 
-	function NumberOfPictures() {
-		return $this->SortedPictures()->Count();
-	}
+    public function NumberOfPictures()
+    {
+        return $this->SortedPictures()->Count();
+    }
 
-	function PrevPicture($currentPicture = null) {
-		if (!$currentPicture) {
-			$currentPicture = $this;
-		}
-		$sort = $currentPicture->Sort;
-		$prev = $this->SortedPictures()->filter(['Sort:LessThan' => $sort])->sort("Sort", "DESC")->first();
-		if (!$prev) {
-			// select last from prev gallery
-			$prevGallery = $this->Parent()->AllChildren()->filter(['Sort:LessThan' => $this->Sort])->sort("Sort", "DESC")->first();
-			if (is_a($prevGallery, 'GalleryPage')) {
-				$prev = $prevGallery->SortedPictures()->Last();
-			}
-		}
-		return $prev;
-	}
+    public function PrevPicture($currentPicture = null)
+    {
+        if (!$currentPicture) {
+            $currentPicture = $this;
+        }
+        $sort = $currentPicture->Sort;
+        $prev = $this->SortedPictures()->filter(['Sort:LessThan' => $sort])->sort("Sort", "DESC")->first();
+        if (!$prev) {
+            // select last from prev gallery
+            $prevGallery = $this->Parent()->AllChildren()->filter(['Sort:LessThan' => $this->Sort])->sort("Sort", "DESC")->first();
+            if (is_a($prevGallery, 'GalleryPage')) {
+                $prev = $prevGallery->SortedPictures()->Last();
+            }
+        }
+        return $prev;
+    }
 
-	function onBeforeDelete() {
-		parent::onBeforeDelete();
-		$publishedStatusFlag = $this->getStatusFlags();
-		// only delete if gallery page is already unpublished
-		// see https://github.com/silverstripe/silverstripe-framework/issues/4017
-		if (isset($publishedStatusFlag['addedtodraft'])) {
-			$this->deleteGalleryPictures();
-		}
-	}
+    public function onBeforeDelete()
+    {
+        parent::onBeforeDelete();
+        $publishedStatusFlag = $this->getStatusFlags();
+        // only delete if gallery page is already unpublished
+        // see https://github.com/silverstripe/silverstripe-framework/issues/4017
+        if (isset($publishedStatusFlag['addedtodraft'])) {
+            $this->deleteGalleryPictures();
+        }
+    }
 
-	function deleteGalleryPictures() {
-		if ($pictures = $this->Pictures()) {
-			foreach ($pictures as $picture) {
-				$picture->delete();
-			}
-		}
-	}
-    
-    private function uploadFolderName() {
+    public function deleteGalleryPictures()
+    {
+        if ($pictures = $this->Pictures()) {
+            foreach ($pictures as $picture) {
+                $picture->delete();
+            }
+        }
+    }
+
+    private function uploadFolderName()
+    {
         $imageFolder = $this->config()->get('imageFolder');
         // backward compatibility: use 'images/$URLSegment' instead
         if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
@@ -112,5 +122,5 @@ class GalleryPage extends Page {
         $imageFolder = str_replace('$URLSegment', $this->URLSegment, $imageFolder);
         return $imageFolder;
     }
-    
+
 }

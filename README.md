@@ -4,7 +4,7 @@ Adds a page type to manage multiple images including description and other vario
 
 The following SiteTree page type will be added:
 
-  * `GalleryPage` / `GalleryPage_Controller`
+  * `GalleryPage` / `GalleryPageController`
   * `GalleryPageHolder`
   * `GalleryPicture`
 
