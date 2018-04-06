@@ -4,21 +4,15 @@ Adds a page type to manage multiple images including description and other vario
 
 The following SiteTree page type will be added:
 
-  * `GalleryPage`
-
-`GalleryPage` can hold many `GalleryPictures`. `GalleryPictures` holds the DataType `Image` and contains additional fields (URLSegment, Sort, Title …) for the image.
+  * `GalleryPage` / `GalleryPage_Controller`
+  * `GalleryPageHolder`
+  * `GalleryPicture`
 
 ## Requirements
 
-The module is using:
-
   * SilverStripe 4+ (use v0.6.1 for SilverStripe 3.x)
-  * colymba/gridfield-bulk-editing-tools
-  * undefinedoffset/sortablegridfield
 
 ## Installation
-
-Install via composer:
 
 ```sh
   $ cd to_your_silverstripe_root_dir
