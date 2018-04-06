@@ -6,7 +6,7 @@
   "keywords": [
     "silverstripe", "pictures", "image", "gallery", "imagegallery"
   ],
-  "license": "GPL-2.0-or-later",
+  "license": "GPL-2.0-only",
   "authors": [
     {
       "name": "Philipp Staender",
@@ -18,6 +18,7 @@
   },
   "require": {
     "php": ">=5.6.0",
+    "silverstripe/cms": ">=4 <5",
     "colymba/gridfield-bulk-editing-tools": "*",
     "symbiote/silverstripe-gridfieldextensions": "*"
   }
