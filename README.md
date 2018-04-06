@@ -12,6 +12,7 @@ The following SiteTree page type will be added:
 
 The following modules are required and have to be installed:
 
+  * SilverStripe 4+ (user v0.6.1 for SilverStripe 3.x)
   * colymba/gridfield-bulk-editing-tools
   * undefinedoffset/sortablegridfield
 
