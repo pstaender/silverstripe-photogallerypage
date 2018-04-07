@@ -4,39 +4,20 @@ Name: photogallerypage
 GalleryPicture:
   previewWidth: 200
   previewHeight: 200
-  jpegOptimCommand: /usr/bin/jpegoptim
-  generateOptimizedJPEG: false
   deleteImageFileOnDelete: true
-  #/usr/local/bin/jpegoptim
   removeCMSFields:
     - Sort
     - URLSegment
-  normal:
-    maxWidth: 2000
-    maxHeight: 2000
-    quality: 50
-    subfolder: normal
-    # GDQuality: 100
-  medium:
-    maxWidth: 1200
-    maxHeight: 1200
-    quality: 50
-    subfolder: medium
-  small:
-    maxWidth: 900
-    maxHeight: 900
-    quality: 50
-    subfolder: small
 GalleryPage_Controller:
   picturesAccessibleViaURL: true
   redirectToParentPageIfPictureNotFound: false
 GalleryPage:
   picturesPerPage: 1000
-  imageFolder: "images/"
-  usePageURLSegmentAsSubfolder: true
+  imageFolder: "images/$URLSegment"
   galleryImageListFieldMapping:
     Title: 'Title'
-    ImagePreview: 'ImagePreview'
+    PreviewImageField: 'ImagePreview'
     ContentPreview: 'ContentPreview'
     URLSegment: 'URL'
     PermanentURLSegment: 'PermanentURL'
+    Sort: 'Sort'

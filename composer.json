@@ -17,11 +17,9 @@
     "issues": "https://github.com/pstaender/silverstripe-photogallerypage/issues"
   },
   "require": {
-    "php": ">=5.3.3",
-    "silverstripe/cms": ">=3.1 <4",
-    "silverstripe/framework": ">=3.1 <4",
-    "colymba/gridfield-bulk-editing-tools": ">=2.1",
-    "undefinedoffset/sortablegridfield": ">=0.4"
-  },
-  "minimum-stability": "dev"
+    "php": ">=5.6.0",
+    "silverstripe/cms": ">=4 <5",
+    "colymba/gridfield-bulk-editing-tools": "*",
+    "symbiote/silverstripe-gridfieldextensions": "*"
+  }
 }

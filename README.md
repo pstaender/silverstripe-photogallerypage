@@ -4,54 +4,25 @@ Adds a page type to manage multiple images including description and other vario
 
 The following SiteTree page type will be added:
 
-  * `GalleryPage`
-
-`GalleryPage` can hold many `GalleryPictures`. `GalleryPictures` holds the DataType `Image` and contains additional fields (URLSegment, Sort, Title …) for the image.
+  * `GalleryPage` / `GalleryPageController`
+  * `GalleryPageHolder`
+  * `GalleryPicture`
 
 ## Requirements
 
-The following modules are required and have to be installed:
-
-  * colymba/gridfield-bulk-editing-tools
-  * undefinedoffset/sortablegridfield
-
-Easiest way to install is using composer:
-
-```sh
-  $ cd to_your_silverstripe_root_dir
-  $ composer require colymba/gridfield-bulk-editing-tools ">=2.1"
-  $ composer require undefinedoffset/sortablegridfield ">=0.4"
-```
+  * SilverStripe 4+ (use v0.6.1 for SilverStripe 3.x)
 
 ## Installation
 
-Best practice via composer:
-
 ```sh
-  $ cd to_your_silverstripe_root_dir
   $ composer require pstaender/silverstripe-photogallerypage
 ```
 
-Don't forget to run a `dev/build` after installing the module(s): `http://localhost/dev/build?flush=all`.
+Don't forget to run a `dev/build?flush=all` after installing.
 
 ## Methods and Behaviour
 
-All Pictures will be available through `SortedPictures`, with `+` for ascending (default) and `-` for descending. All Pictures are also available as URL. Let's assume the URL of your GalleryPage is `http://localhost/photos` and (an arbitary) image has the URLSegment `example-picture`, it will be available as `http://localhost/photos/example-picture`. This behaviour can be be switched on/off through `picturesAccessibleViaURL` in your config (see below for further details).
-
-Helpful methods on `GalleryPage_Controller`:
-
-  * CurrentPicture
-  * SortedPictures
-
-Helpful methods on `GalleryPicture`:
-
-  * ImagePreview
-  * AllPicturesCount
-  * IsCurrent
-  * LinkingMode
-  * Position
-  * Link
-  * OptimizedJPEG(normal|medium|small) (requires unix tool `jpegoptim` -> `apt-get install jpegoptim`)
+All Pictures will be available through `SortedPictures`, with `+` for ascending (default) and `-` for descending. All Pictures are also available as URL. Let's assume the URL of your GalleryPage is `http://localhost/photos` and (an arbitary) image has the URLSegment `example-picture`, it will be available as `http://localhost/photos/example-picture`. This behaviour can be be switched on/off with `picturesAccessibleViaURL` in your config.
 
 ## Usage in Template
 
@@ -66,12 +37,12 @@ Your `Layout/GalleryPage.ss` could be for instance:
     <br />
     <span class="previousPicture">
       <% with Previous %>
-        <a href="$Link">« $Image.SetHeight(100)</a>
+        <a href="$Link">« $Image.ScaleHeight(100)</a>
       <% end_with %>
     </span>
     <span class="nextPicture">
       <% with Next %>
-        <a href="$Link">$Image.SetHeight(100) » </a>
+        <a href="$Link">$Image.ScaleHeight(100) » </a>
       <% end_with %>
     </span>
   <% end_with %>
@@ -90,31 +61,7 @@ Your `Layout/GalleryPage.ss` could be for instance:
 
 ## Configuration
 
-The following attributes can be configured optional in your project `config.yml` (default values are used here):
-
-```yml
----
-Name: yourprojectconfig
----
-GalleryPicture:
-  previewWidth: 300
-  deleteImageFileOnDelete: true
-  removeCMSFields:
-    - Sort
-    - URLSegment
-GalleryPage_Controller:
-  picturesAccessibleViaURL: true
-GalleryPage:
-  picturesPerPage: 100
-  imageFolder: "images/"
-  usePageURLSegmentAsSubfolder: true
-  galleryImageListFieldMapping:
-    Title: 'Title'
-    ImagePreview: 'ImagePreview'
-    ContentPreview: 'ContentPreview'
-    URLSegment: 'URL'
-    PermanentURLSegment: 'PermanentURL'
-```
+See in `_config/photogallerypage.yml` what possible configuration attributes are available for you to overwrite.
 
 ## Copyright and License
 
