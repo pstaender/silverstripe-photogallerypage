@@ -15,7 +15,6 @@ The following SiteTree page type will be added:
 ## Installation
 
 ```sh
-  $ cd to_your_silverstripe_root_dir
   $ composer require pstaender/silverstripe-photogallerypage
 ```
 
@@ -23,7 +22,7 @@ Don't forget to run a `dev/build?flush=all` after installing.
 
 ## Methods and Behaviour
 
-All Pictures will be available through `SortedPictures`, with `+` for ascending (default) and `-` for descending. All Pictures are also available as URL. Let's assume the URL of your GalleryPage is `http://localhost/photos` and (an arbitary) image has the URLSegment `example-picture`, it will be available as `http://localhost/photos/example-picture`. This behaviour can be be switched on/off through `picturesAccessibleViaURL` in your config (see below for further details).
+All Pictures will be available through `SortedPictures`, with `+` for ascending (default) and `-` for descending. All Pictures are also available as URL. Let's assume the URL of your GalleryPage is `http://localhost/photos` and (an arbitary) image has the URLSegment `example-picture`, it will be available as `http://localhost/photos/example-picture`. This behaviour can be be switched on/off with `picturesAccessibleViaURL` in your config.
 
 ## Usage in Template
 
@@ -62,7 +61,7 @@ Your `Layout/GalleryPage.ss` could be for instance:
 
 ## Configuration
 
-Have a look at `_config/photogallerypage.yml` to see what configuration attributes are available and can be overwritten in your projects' config.
+See in `_config/photogallerypage.yml` what possible configuration attributes are available for you to overwrite.
 
 ## Copyright and License
 
