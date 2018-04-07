@@ -123,4 +123,8 @@ class GalleryPage extends Page
         return $imageFolder;
     }
 
+	protected function imageFolderName() {
+		return $this->config()->get('imageFolder');
+	}
+
 }
