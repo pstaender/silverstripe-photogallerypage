@@ -7,6 +7,6 @@ class GalleryPageHolder extends Page
 
     private static $has_one = [];
 
-    private static $icon = "silverstripe-photogallerypage/images/images.svg";
+    private static $icon = "vendor/pstaender/silverstripe-photogallerypage/images/images.svg";
 
 }
