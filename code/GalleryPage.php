@@ -1,11 +1,14 @@
 <?php
 
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\GridField;
 
 class GalleryPage extends Page
 {
 
-    private static $db = [];
+    private static $db = [
+        'SortPicturesAlphanumerically' => 'Boolean',
+    ];
 
     private static $has_one = [];
 
@@ -25,7 +28,10 @@ class GalleryPage extends Page
         $conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $this->uploadFolderName());
         $pictures = $this->SortedPictures();
         $gridField = new GridField\GridField('Pictures', 'Pictures', $pictures, $conf);
-        $gridField->getConfig()->addComponent(new \Symbiote\GridFieldExtensions\GridFieldOrderableRows('Sort'));
+
+        if (!preg_match('/\\./', $this->pictureSortfield())) {
+            $gridField->getConfig()->addComponent(new \Symbiote\GridFieldExtensions\GridFieldOrderableRows($this->pictureSortfield()));
+        }
 
         $dataColumns = $gridField->getConfig()->getComponentByType(GridField\GridFieldDataColumns::class);
         $imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
@@ -36,6 +42,7 @@ class GalleryPage extends Page
 
         if ($this->ID > 0) {
             $fields->addFieldsToTab('Root.' . _t('GalleryPage.Photos', 'Photos'), [
+                CheckboxField::create('SortPicturesAlphanumerically', _t('GalleryPage.SortPicturesAlphanumerically', 'Sort pictures alphanumerically')),
                 $gridField,
             ]);
         }
@@ -44,7 +51,13 @@ class GalleryPage extends Page
 
     public function SortedPictures($direction = '+')
     {
-        return $this->Pictures()->sort("Sort", ($direction === '-') ? "DESC" : "ASC");
+        return $this->Pictures()->sort($this->pictureSortfield(), ($direction === '-') ? "DESC" : "ASC");
+
+    }
+
+    private function pictureSortfield()
+    {
+        return ($this->SortPicturesAlphanumerically) ? "Image.Name" : "Sort";
     }
 
     public function FirstPicture($direction = '+')

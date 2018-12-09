@@ -18,6 +18,6 @@ GalleryPage:
     Title: 'Title'
     PreviewImageField: 'ImagePreview'
     ContentPreview: 'ContentPreview'
+    'Image.Name': 'Filename'
     URLSegment: 'URL'
     PermanentURLSegment: 'PermanentURL'
-    Sort: 'Sort'

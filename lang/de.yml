@@ -1,8 +1,10 @@
 de:
   GalleryPage:
     Photos: Fotos
+    SortPicturesAlphanumerically: Sortiere Fotos automatisch alphanumerisch im Frontend
   GalleryPicture:
     Title: Titel
+    Filename: Dateiname
     ImagePreview: Bildvorschau
     ContentPreview: Inhalt (erster Satz)
     PermanentURL: Permanente URL (optional)
