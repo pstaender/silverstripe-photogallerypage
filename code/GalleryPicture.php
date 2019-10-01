@@ -2,27 +2,26 @@
 
 class GalleryPicture extends \SilverStripe\ORM\DataObject
 {
-
     private static $db = [
-        "Sort" => "Int",
-        "Title" => "Varchar(255)",
-        "Content" => "Text",
-        "URLSegment" => "Varchar(255)",
-        "ParmanentURLSegment" => "Varchar(255)",
+        'Sort' => 'Int',
+        'Title' => 'Varchar(255)',
+        'Content' => 'Text',
+        'URLSegment' => 'Varchar(255)',
+        'ParmanentURLSegment' => 'Varchar(255)',
     ];
 
     private static $belongs_to = [
-        "Page" => "SiteTree",
+        'Page' => 'SiteTree',
     ];
 
     private static $has_one = [
-        "Image" => \SilverStripe\Assets\Image::class,
-        "Page" => "GalleryPage",
+        'Image' => \SilverStripe\Assets\Image::class,
+        'Page' => 'GalleryPage',
     ];
 
     private static $indexes = [
-        "URLSegment" => true,
-        "ParmanentURLSegment" => true,
+        'URLSegment' => true,
+        'ParmanentURLSegment' => true,
     ];
 
     // caching
@@ -35,6 +34,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         foreach ($this->config()->get('removeCMSFields') as $key) {
             $fields->removeFieldFromTab('Root.Main', $key);
         }
+
         return $fields;
     }
 
@@ -43,23 +43,24 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         $pic = null;
         if ($direction === '+') {
             $filter = [
-                "Sort:GreaterThan" => $this->Sort,
+                'Sort:GreaterThan' => $this->Sort,
             ];
             $sort = ['Sort' => 'ASC'];
         }
         if ($direction === '-') {
             $filter = [
-                "Sort:LessThan" => $this->Sort,
+                'Sort:LessThan' => $this->Sort,
             ];
             $sort = ['Sort' => 'DESC'];
         }
+
         return $this->Page()->Pictures()->filter($filter)->sort($sort)->first();
     }
 
     public function fortemplate()
     {
         if ($pic = $this->Image()) {
-            return '<section class="galleryPicture"><h1>' . $this->Title . '</h1><div class="content">' . $this->Content . '</div>' . $this->Image()->fortemplate() . '</section>';
+            return '<section class="galleryPicture"><h1>'.$this->Title.'</h1><div class="content">'.$this->Content.'</div>'.$this->Image()->fortemplate().'</section>';
         } else {
             return null;
         }
@@ -78,12 +79,13 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         if (!($height > 0)) {
             $height = $this->config()->get('previewHeight');
         }
+
         return ($image = $this->Image()) ? $image->Fit($width, $height) : null;
     }
 
     public function PreviewImageField()
     {
-        return ($image = $this->Image()) ? \SilverStripe\Forms\LiteralField::create('Preview', '<img src="' . $image->PreviewLink() . '" style="max-height: 150px;" alt="' . $image->Title . '" />') : null;
+        return ($image = $this->Image()) ? \SilverStripe\Forms\LiteralField::create('Preview', '<img src="'.$image->PreviewLink().'" style="max-height: 150px;" alt="'.$image->Title.'" />') : null;
     }
 
     public function Content()
@@ -96,6 +98,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         if ($c = $this->dbObject('Content')) {
             return $c->FirstSentence();
         }
+
         return $this->Content;
     }
 
@@ -114,6 +117,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
                 $this->_moscaicPicture = imagecreatefromstring($this->Image()->ScaleHeight($height)->getString());
             }
         }
+
         return $this->_moscaicPicture;
     }
 
@@ -128,7 +132,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
             $g = ($rgb >> 8) & 0xFF;
             $b = $rgb & 0xFF;
         } else {
-            $r = $g = $b = "0,0,0";
+            $r = $g = $b = '0,0,0';
         }
 
         return "$r,$g,$b";
@@ -137,6 +141,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
     public function AllPicturesCount()
     {
         $this->_allPicturesCount = ($this->_allPicturesCount) ? $this->_allPicturesCount : $this->Page()->Pictures()->Count();
+
         return $this->_allPicturesCount;
     }
 
@@ -152,7 +157,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
 
     public function Link()
     {
-        return $this->Page()->Link() . $this->URLSegment;
+        return $this->Page()->Link().$this->URLSegment;
     }
 
     public function Position()
@@ -166,12 +171,13 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         if ($this->URLSegment === Controller::curr()->CurrentPicture()->URLSegment) {
             $lm = 'current';
         }
+
         return $lm;
     }
 
     public function IsCurrent()
     {
-        return ($this->LinkingMode() === 'current');
+        return $this->LinkingMode() === 'current';
     }
 
     public function TopLeftPixelValue()
@@ -200,6 +206,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         if (sizeof($values) > 0) {
             return (((int) $values[0] + (int) $values[1] + (int) $values[2]) / 3) >= $threshold;
         }
+
         return null;
     }
 
@@ -223,6 +230,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         parent::onBeforeWrite();
         if ($this->ParmanentURLSegment) {
             $this->URLSegment = $this->ParmanentURLSegment;
+
             return;
         }
         if ((!$this->URLSegment) || (preg_match("/^\d+$/", $this->URLSegment)) || ($this->isChanged('Title')) || ($this->forceUpdateURLSegment)) {
@@ -240,10 +248,10 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         // check for duplicate URLSegment
         $i = 1;
         while (GalleryPicture::get()->filter(['URLSegment' => $this->URLSegment, 'PageID' => $this->PageID])->exclude(['ID' => $this->ID])->Count() > 0) {
-            $this->URLSegment = preg_replace("/(^.*?)(\-\d+)+$/", "$1", $this->URLSegment);
+            $this->URLSegment = preg_replace("/(^.*?)(\-\d+)+$/", '$1', $this->URLSegment);
             $number = (preg_match("/\-*0*(\d)+$/", $this->URLSegment, $matches)) ? (intval($matches[1]) + 1) : $i;
-            $this->URLSegment = $this->URLSegment . "-" . sprintf('%02d', $number);
-            $i++;
+            $this->URLSegment = $this->URLSegment.'-'.sprintf('%02d', $number);
+            ++$i;
         }
         if (!$this->Sort && $this->PageID > 0) {
             $this->Sort = GalleryPicture::get()->filter(['PageID' => $this->PageID])->max('Sort') + 1;
@@ -264,8 +272,9 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         parent::onBeforeDelete();
         if (($image = $this->Image()) && ($this->config()->get('deleteImageFileOnDelete'))) {
             $image->deleteFile();
-            $image->delete();
+            if ($image->ID) {
+                $image->delete();
+            }
         }
     }
-
 }

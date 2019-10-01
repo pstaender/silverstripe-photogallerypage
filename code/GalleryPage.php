@@ -5,7 +5,6 @@ use SilverStripe\Forms\GridField;
 
 class GalleryPage extends Page
 {
-
     private static $db = [
         'SortPicturesAlphanumerically' => 'Boolean',
     ];
@@ -13,9 +12,9 @@ class GalleryPage extends Page
     private static $has_one = [];
 
     private static $has_many = [
-        "Pictures" => GalleryPicture::class,
+        'Pictures' => GalleryPicture::class,
     ];
-    private static $icon = "vendor/pstaender/silverstripe-photogallerypage/images/image.svg";
+    private static $icon = 'vendor/pstaender/silverstripe-photogallerypage/images/image.svg';
 
     public function getCMSFields()
     {
@@ -23,8 +22,9 @@ class GalleryPage extends Page
         $pictures_per_page = $this->config()->get('picturesPerPage');
         $conf = GridField\GridFieldConfig_RelationEditor::create();
         $conf->getComponentByType(GridField\GridFieldPaginator::class)->setItemsPerPage($pictures_per_page);
-        $conf->addComponent(new Colymba\BulkUpload\BulkUploader());
-        $conf->addComponent(new \SilverStripe\Forms\GridField\GridFieldDeleteAction());
+        $conf->addComponent(new \Colymba\BulkUpload\BulkUploader());
+        //$conf->addComponent(new \SilverStripe\Forms\GridField\GridFieldDeleteAction());
+        $conf->addComponent(new \Colymba\BulkManager\BulkManager());
         $conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $this->uploadFolderName());
         $pictures = $this->SortedPictures();
         $gridField = new GridField\GridField('Pictures', 'Pictures', $pictures, $conf);
@@ -36,28 +36,28 @@ class GalleryPage extends Page
         $dataColumns = $gridField->getConfig()->getComponentByType(GridField\GridFieldDataColumns::class);
         $imageFieldMapping = $this->config()->get('galleryImageListFieldMapping');
         foreach ($imageFieldMapping as $key => $value) {
-            $imageFieldMapping[$key] = _t('GalleryPicture.' . $key, $value);
+            $imageFieldMapping[$key] = _t('GalleryPicture.'.$key, $value);
         }
         $dataColumns->setDisplayFields($imageFieldMapping);
 
         if ($this->ID > 0) {
-            $fields->addFieldsToTab('Root.' . _t('GalleryPage.Photos', 'Photos'), [
+            $fields->addFieldsToTab('Root.'._t('GalleryPage.Photos', 'Photos'), [
                 CheckboxField::create('SortPicturesAlphanumerically', _t('GalleryPage.SortPicturesAlphanumerically', 'Sort pictures alphanumerically')),
                 $gridField,
             ]);
         }
+
         return $fields;
     }
 
     public function SortedPictures($direction = '+')
     {
-        return $this->Pictures()->sort($this->pictureSortfield(), ($direction === '-') ? "DESC" : "ASC");
-
+        return $this->Pictures()->sort($this->pictureSortfield(), ($direction === '-') ? 'DESC' : 'ASC');
     }
 
     private function pictureSortfield()
     {
-        return ($this->SortPicturesAlphanumerically) ? "Image.Name" : "Sort";
+        return ($this->SortPicturesAlphanumerically) ? 'Image.Name' : 'Sort';
     }
 
     public function FirstPicture($direction = '+')
@@ -79,6 +79,7 @@ class GalleryPage extends Page
                 $next = $nextGallery->SortedPictures()->First();
             }
         }
+
         return $next;
     }
 
@@ -93,14 +94,15 @@ class GalleryPage extends Page
             $currentPicture = $this;
         }
         $sort = $currentPicture->Sort;
-        $prev = $this->SortedPictures()->filter(['Sort:LessThan' => $sort])->sort("Sort", "DESC")->first();
+        $prev = $this->SortedPictures()->filter(['Sort:LessThan' => $sort])->sort('Sort', 'DESC')->first();
         if (!$prev) {
             // select last from prev gallery
-            $prevGallery = $this->Parent()->AllChildren()->filter(['Sort:LessThan' => $this->Sort])->sort("Sort", "DESC")->first();
+            $prevGallery = $this->Parent()->AllChildren()->filter(['Sort:LessThan' => $this->Sort])->sort('Sort', 'DESC')->first();
             if (is_a($prevGallery, 'GalleryPage')) {
                 $prev = $prevGallery->SortedPictures()->Last();
             }
         }
+
         return $prev;
     }
 
@@ -129,11 +131,11 @@ class GalleryPage extends Page
         $imageFolder = $this->config()->get('imageFolder');
         // backward compatibility: use 'images/$URLSegment' instead
         if ($this->config()->get('usePageURLSegmentAsSubfolder')) {
-            $imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder) . $this->URLSegment;
+            $imageFolder = preg_replace("/^(.+?)\/*$/", '$1/', $imageFolder).$this->URLSegment;
         }
         $imageFolder = str_replace('$ID', $this->ID, $imageFolder);
         $imageFolder = str_replace('$URLSegment', $this->URLSegment, $imageFolder);
+
         return $imageFolder;
     }
-
 }
