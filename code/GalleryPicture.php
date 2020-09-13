@@ -220,6 +220,17 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         return $this->IsPixelAbove($this->TopRightPixelValue(), $threshold);
     }
 
+    public function IsBottomLeftPixelAbove($threshold = 180)
+    {
+        return $this->IsPixelAbove($this->BottomLeftPixelValue(), $threshold);
+    }
+
+    public function IsBottomRightPixelAbove($threshold = 180)
+    {
+        return $this->IsPixelAbove($this->BottomRightPixelValue(), $threshold);
+    }
+
+
     public function NumberOfPicture()
     {
         return $this->Sort;
