@@ -17,7 +17,8 @@ class GalleryPageController extends PageController
         if (!$URLSegment) {
             $this->CurrentPicture = $this->dataRecord->FirstPicture();
         } else {
-            $this->CurrentPicture = GalleryPicture::get()->filter(["URLSegment" => $URLSegment, "PageID" => $this->dataRecord->ID])->first();
+            $sanatizedURLSegment = preg_split('/[\\?#]/', $URLSegment)[0];
+            $this->CurrentPicture = GalleryPicture::get()->filter(["URLSegment" => $sanatizedURLSegment, "PageID" => $this->dataRecord->ID])->first();
         }
         return $this->CurrentPicture;
     }
