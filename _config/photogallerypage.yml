@@ -21,7 +21,4 @@ GalleryPage:
     'Image.Name': 'Filename'
     URLSegment: 'URL'
     PermanentURLSegment: 'PermanentURL'
-# temporarily workaround for bug https://github.com/colymba/GridFieldBulkEditingTools/issues/176
-SilverStripe\Admin\LeftAndMain:
-  extra_requirements_javascript:
-    - colymba/gridfield-bulk-editing-tools:client/dist/js/main.js
+

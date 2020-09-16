@@ -4,7 +4,6 @@ use SilverStripe\ORM\DataObject;
 
 class GalleryPageController extends PageController
 {
-
     private static $url_handlers = [
         '$Picture' => 'picture', // catch-all
     ];
@@ -17,8 +16,10 @@ class GalleryPageController extends PageController
         if (!$URLSegment) {
             $this->CurrentPicture = $this->dataRecord->FirstPicture();
         } else {
-            $sanatizedURLSegment = preg_split('/[\\?#]/', $URLSegment)[0];
-            $this->CurrentPicture = GalleryPicture::get()->filter(["URLSegment" => $sanatizedURLSegment, "PageID" => $this->dataRecord->ID])->first();
+            $this->CurrentPicture = GalleryPicture::get()->filter([
+                "URLSegment" => $URLSegment,
+                "PageID" => $this->dataRecord->ID
+            ])->first();
         }
         return $this->CurrentPicture;
     }
@@ -49,7 +50,7 @@ class GalleryPageController extends PageController
     {
         if ($this->findPictureByURLSegment($action)) {
             return true;
-        } else if (!$this->config()->get('picturesAccessibleViaURL')) {
+        } elseif (!$this->config()->get('picturesAccessibleViaURL')) {
             return true;
         } else {
             return parent::hasAction($action);
@@ -60,7 +61,7 @@ class GalleryPageController extends PageController
     {
         if ($this->hasAction($action)) {
             return $this->dataRecord->canView();
-        } else if (!$this->config()->get('picturesAccessibleViaURL')) {
+        } elseif (!$this->config()->get('picturesAccessibleViaURL')) {
             return true;
         } else {
             return false;
@@ -106,5 +107,4 @@ class GalleryPageController extends PageController
         }
         return DataObject::get($className, $where, $sort)->first();
     }
-
 }
