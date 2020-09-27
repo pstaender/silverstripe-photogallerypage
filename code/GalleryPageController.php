@@ -14,9 +14,10 @@ class GalleryPageController extends PageController
 
     protected function findPictureByURLSegment($urlSegment)
     {
-        if (!empty($urlSegment)) {
+        if (empty($urlSegment)) {
             $this->CurrentPicture = $this->dataRecord->FirstPicture();
         } else {
+
             $this->CurrentPicture = GalleryPicture::get()->filter([
                 "URLSegment" => $urlSegment,
                 "PageID" => $this->dataRecord->ID
@@ -36,7 +37,11 @@ class GalleryPageController extends PageController
     public function picture()
     {
         if ($this->config()->get('picturesAccessibleViaURL')) {
-            $this->CurrentPicture = $this->findCachedPictureByURLSegment($this->request->param('Picture'));
+            $picturerUrlSegment = $this->request->param('Picture');
+            $this->CurrentPicture = $this->findCachedPictureByURLSegment($picturerUrlSegment);
+            if ($this->config()->get('redirectToFirstPictureOnEmptyURLSegment') && empty($picturerUrlSegment) && $this->CurrentPicture) {
+                return $this->redirect($this->CurrentPicture->Link());
+            }
             if ($this->CurrentPicture) {
                 return [];
             } else {
@@ -65,13 +70,10 @@ class GalleryPageController extends PageController
 
     public function checkAccessAction($action)
     {
-        if ($this->hasAction($action)) {
-            return $this->dataRecord->canView();
-        } elseif (!$this->config()->get('picturesAccessibleViaURL')) {
-            return true;
-        } else {
-            return false;
+        if ($this->config()->get('picturesAccessibleViaURL') && $this->findCachedPictureByURLSegment($this->request->param('Picture'))) {
+            return $this->canView();
         }
+        return parent::checkAccessAction($action);
     }
 
     public function CurrentPicture($cache = true)
