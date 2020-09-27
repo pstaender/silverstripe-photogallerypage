@@ -62,7 +62,7 @@ class GalleryPageController extends PageController
 
     public function hasAction($action)
     {
-        if ($this->findPictureByURLSegment($action)) {
+        if ($this->config()->get('picturesAccessibleViaURL') && $this->findPictureByURLSegment($action)) {
             return true;
         }
         return parent::hasAction($action);
