@@ -2,7 +2,7 @@
 
 namespace Zeitpulse;
 
-class GalleryPageHolder extends Page
+class GalleryPageHolder extends \Page
 {
 
     private static $db = [];

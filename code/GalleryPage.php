@@ -5,7 +5,7 @@ namespace Zeitpulse;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\GridField;
 
-class GalleryPage extends Page
+class GalleryPage extends \Page
 {
     private static $db = [
         'SortPicturesAlphanumerically' => 'Boolean',

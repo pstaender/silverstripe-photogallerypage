@@ -4,7 +4,7 @@ namespace Zeitpulse;
 
 use SilverStripe\ORM\DataObject;
 
-class GalleryPageController extends PageController
+class GalleryPageController extends \PageController
 {
     private static $url_handlers = [
         '$Picture' => 'picture', // catch-all
