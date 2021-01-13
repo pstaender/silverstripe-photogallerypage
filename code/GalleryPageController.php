@@ -1,5 +1,7 @@
 <?php
 
+namespace Zeitpulse;
+
 use SilverStripe\ORM\DataObject;
 
 class GalleryPageController extends PageController

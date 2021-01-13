@@ -1,5 +1,7 @@
 <?php
 
+namespace Zeitpulse;
+
 class GalleryPicture extends \SilverStripe\ORM\DataObject
 {
     private static $db = [
@@ -9,6 +11,8 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         'URLSegment' => 'Varchar(255)',
         'ParmanentURLSegment' => 'Varchar(255)',
     ];
+
+    private static $table_name = 'GalleryPicture';
 
     private static $belongs_to = [
         'Page' => 'SiteTree',
@@ -200,8 +204,9 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         return $this->pixelToColorString(5, 0, null, 6, 6);
     }
 
-    public function IsPixelAbove($pixel, $threshold = 180)
+    public function IsPixelAbove($pixel, $threshold = null)
     {
+        $threshold = $this->defaultThresholdForDarkLight($threshold);
         $values = explode(',', $pixel);
         if (sizeof($values) > 0) {
             return (((int) $values[0] + (int) $values[1] + (int) $values[2]) / 3) >= $threshold;
@@ -210,24 +215,31 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         return null;
     }
 
-    public function IsTopLeftPixelAbove($threshold = 180)
+    public function IsTopLeftPixelAbove($threshold = null)
     {
-        return $this->IsPixelAbove($this->TopLeftPixelValue(), $threshold);
+        return $this->IsPixelAbove($this->TopLeftPixelValue(), $this->defaultThresholdForDarkLight($threshold));
     }
 
-    public function IsTopRightPixelAbove($threshold = 180)
+    public function IsTopRightPixelAbove($threshold = null)
     {
-        return $this->IsPixelAbove($this->TopRightPixelValue(), $threshold);
+        return $this->IsPixelAbove($this->TopRightPixelValue(), $this->defaultThresholdForDarkLight($threshold));
     }
 
-    public function IsBottomLeftPixelAbove($threshold = 180)
+    public function IsBottomLeftPixelAbove($threshold = null)
     {
-        return $this->IsPixelAbove($this->BottomLeftPixelValue(), $threshold);
+        return $this->IsPixelAbove($this->BottomLeftPixelValue(), $this->defaultThresholdForDarkLight($threshold));
     }
 
-    public function IsBottomRightPixelAbove($threshold = 180)
+    public function IsBottomRightPixelAbove($threshold = null)
     {
-        return $this->IsPixelAbove($this->BottomRightPixelValue(), $threshold);
+        return $this->IsPixelAbove($this->BottomRightPixelValue(), $this->defaultThresholdForDarkLight($threshold));
+    }
+
+    public function defaultThresholdForDarkLight($threshold = null) {
+        if ($threshold !== null) {
+            return $threshold;
+        }
+        return $this->config()->get('darkLightThreshold');
     }
 
 

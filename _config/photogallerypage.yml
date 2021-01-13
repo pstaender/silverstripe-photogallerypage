@@ -1,17 +1,18 @@
 ---
 Name: photogallerypage
 ---
-GalleryPicture:
+Zeitpulse\GalleryPicture:
   previewWidth: 200
   previewHeight: 200
   deleteImageFileOnDelete: true
+  darkLightThreshold: 180
   removeCMSFields:
     - Sort
     - URLSegment
-GalleryPage_Controller:
+Zeitpulse\GalleryPage_Controller:
   picturesAccessibleViaURL: true
   redirectToParentPageIfPictureNotFound: false
-GalleryPage:
+Zeitpulse\GalleryPage:
   picturesPerPage: 1000
   imageFolder: "images/$URLSegment"
   galleryImageListFieldMapping:

@@ -1,5 +1,7 @@
 <?php
 
+namespace Zeitpulse;
+
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\GridField;
 
@@ -8,6 +10,8 @@ class GalleryPage extends Page
     private static $db = [
         'SortPicturesAlphanumerically' => 'Boolean',
     ];
+
+    private static $table_name = 'GalleryPage';
 
     private static $has_one = [];
 
@@ -23,7 +27,6 @@ class GalleryPage extends Page
         $conf = GridField\GridFieldConfig_RelationEditor::create();
         $conf->getComponentByType(GridField\GridFieldPaginator::class)->setItemsPerPage($pictures_per_page);
         $conf->addComponent(new \Colymba\BulkUpload\BulkUploader());
-        //$conf->addComponent(new \SilverStripe\Forms\GridField\GridFieldDeleteAction());
         $conf->addComponent(new \Colymba\BulkManager\BulkManager());
         $conf->getComponentByType('Colymba\BulkUpload\BulkUploader')->setUfSetup('setFolderName', $this->uploadFolderName());
         $pictures = $this->SortedPictures();
