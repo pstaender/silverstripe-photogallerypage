@@ -12,21 +12,22 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         'ParmanentURLSegment' => 'Varchar(255)',
     ];
 
-    private static $table_name = 'GalleryPicture';
-
     private static $belongs_to = [
         'Page' => 'SiteTree',
     ];
 
     private static $has_one = [
         'Image' => \SilverStripe\Assets\Image::class,
-        'Page' => 'GalleryPage',
+        'Page' => \Zeitpulse\GalleryPage::class,
     ];
 
     private static $indexes = [
         'URLSegment' => true,
         'ParmanentURLSegment' => true,
     ];
+
+    private static $default_classname = 'GalleryPicture';
+    private static $table_name = 'GalleryPicture';
 
     // caching
     private $_allPicturesCount = null;

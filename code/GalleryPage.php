@@ -11,12 +11,13 @@ class GalleryPage extends \Page
         'SortPicturesAlphanumerically' => 'Boolean',
     ];
 
+    private static $default_classname = 'GalleryPage';
     private static $table_name = 'GalleryPage';
 
     private static $has_one = [];
 
     private static $has_many = [
-        'Pictures' => GalleryPicture::class,
+        'Pictures' => \Zeitpulse\GalleryPicture::class,
     ];
     private static $icon = 'vendor/pstaender/silverstripe-photogallerypage/images/image.svg';
 
