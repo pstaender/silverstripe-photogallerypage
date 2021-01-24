@@ -22,4 +22,8 @@ Zeitpulse\GalleryPage:
     'Image.Name': 'Filename'
     URLSegment: 'URL'
     PermanentURLSegment: 'PermanentURL'
-
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    GalleryPage: Zeitpulse\GalleryPage
+    GalleryPageHolder: Zeitpulse\GalleryPageHolder
+    GalleryPicture: Zeitpulse\GalleryPicture
