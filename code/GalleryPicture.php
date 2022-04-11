@@ -65,7 +65,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
     public function fortemplate()
     {
         if ($pic = $this->Image()) {
-            return '<section class="galleryPicture"><h1>'.$this->Title.'</h1><div class="content">'.$this->Content.'</div>'.$this->Image()->fortemplate().'</section>';
+            return '<section class="galleryPicture"><h1>' . $this->Title . '</h1><div class="content">' . $this->Content . '</div>' . $this->Image()->fortemplate() . '</section>';
         } else {
             return null;
         }
@@ -90,7 +90,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
 
     public function PreviewImageField()
     {
-        return ($image = $this->Image()) ? \SilverStripe\Forms\LiteralField::create('Preview', '<img src="'.$image->PreviewLink().'" style="max-height: 150px;" alt="'.$image->Title.'" />') : null;
+        return ($image = $this->Image()) ? \SilverStripe\Forms\LiteralField::create('Preview', '<img src="' . $image->PreviewLink() . '" style="max-height: 150px;" alt="' . $image->Title . '" />') : null;
     }
 
     public function Content()
@@ -162,7 +162,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
 
     public function Link()
     {
-        return $this->Page()->Link().$this->URLSegment;
+        return $this->Page()->Link() . $this->URLSegment;
     }
 
     public function Position()
@@ -236,7 +236,8 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         return $this->IsPixelAbove($this->BottomRightPixelValue(), $this->defaultThresholdForDarkLight($threshold));
     }
 
-    public function defaultThresholdForDarkLight($threshold = null) {
+    public function defaultThresholdForDarkLight($threshold = null)
+    {
         if ($threshold !== null) {
             return $threshold;
         }
@@ -253,11 +254,9 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
     {
         parent::onBeforeWrite();
         if ($this->ParmanentURLSegment) {
-            $this->URLSegment = $this->ParmanentURLSegment;
-
-            return;
-        }
-        if ((!$this->URLSegment) || (preg_match("/^\d+$/", $this->URLSegment)) || ($this->isChanged('Title')) || ($this->forceUpdateURLSegment)) {
+            $filter = \SilverStripe\View\Parsers\URLSegmentFilter::create();
+            $this->URLSegment = $filter->filter($this->ParmanentURLSegment);
+        } else if ((!$this->URLSegment) || (preg_match("/^\d+$/", $this->URLSegment)) || ($this->isChanged('Title')) || ($this->forceUpdateURLSegment)) {
             $filter = \SilverStripe\View\Parsers\URLSegmentFilter::create();
             $t = $filter->filter($this->Title());
             if (strlen(trim($t)) > 0) {
@@ -274,7 +273,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
         while (GalleryPicture::get()->filter(['URLSegment' => $this->URLSegment, 'PageID' => $this->PageID])->exclude(['ID' => $this->ID])->Count() > 0) {
             $this->URLSegment = preg_replace("/(^.*?)(\-\d+)+$/", '$1', $this->URLSegment);
             $number = (preg_match("/\-*0*(\d)+$/", $this->URLSegment, $matches)) ? (intval($matches[1]) + 1) : $i;
-            $this->URLSegment = $this->URLSegment.'-'.sprintf('%02d', $number);
+            $this->URLSegment = $this->URLSegment . '-' . sprintf('%02d', $number);
             ++$i;
         }
         if (!$this->Sort && $this->PageID > 0) {
