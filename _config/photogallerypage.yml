@@ -6,9 +6,6 @@ Zeitpulse\GalleryPicture:
   previewHeight: 200
   deleteImageFileOnDelete: true
   darkLightThreshold: 180
-  removeCMSFields:
-    - Sort
-    - URLSegment
 Zeitpulse\GalleryPage_Controller:
   picturesAccessibleViaURL: true
   redirectToParentPageIfPictureNotFound: false
@@ -16,12 +13,12 @@ Zeitpulse\GalleryPage:
   picturesPerPage: 1000
   imageFolder: "images/$URLSegment"
   galleryImageListFieldMapping:
-    Title: 'Title'
-    PreviewImageField: 'ImagePreview'
-    ContentPreview: 'ContentPreview'
-    'Image.Name': 'Filename'
-    URLSegment: 'URL'
-    PermanentURLSegment: 'PermanentURL'
+    Title: "Title"
+    PreviewImageField: "ImagePreview"
+    ContentPreview: "ContentPreview"
+    "Image.Name": "Filename"
+    URLSegment: "URL"
+    PermanentURLSegment: "PermanentURL"
 SilverStripe\ORM\DatabaseAdmin:
   classname_value_remapping:
     GalleryPage: Zeitpulse\GalleryPage

@@ -33,16 +33,6 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
     private $_allPicturesCount = null;
     private $_moscaicPicture = null;
 
-    public function getCMSFields()
-    {
-        $fields = parent::getCMSFields();
-        foreach ($this->config()->get('removeCMSFields') as $key) {
-            $fields->removeFieldFromTab('Root.Main', $key);
-        }
-
-        return $fields;
-    }
-
     public function Next($direction = '+')
     {
         $pic = null;
