@@ -26,9 +26,9 @@
     ]
   },
   "require": {
-    "php": ">=7.0.0",
-    "silverstripe/framework": "^4",
-    "colymba/gridfield-bulk-editing-tools": "~3.0.0",
+    "php": ">=8",
+    "silverstripe/framework": "^5",
+    "colymba/gridfield-bulk-editing-tools": "~4",
     "symbiote/silverstripe-gridfieldextensions": "*"
   }
 }
