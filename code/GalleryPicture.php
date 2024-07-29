@@ -24,6 +24,7 @@ class GalleryPicture extends \SilverStripe\ORM\DataObject
     private static $indexes = [
         'URLSegment' => true,
         'ParmanentURLSegment' => true,
+        'Sort' => true,
     ];
 
     private static $default_classname = 'GalleryPicture';
